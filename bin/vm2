@@ -1,3 +1,16 @@
 #!/usr/bin/env node
 
-require(__dirname +'/../lib/cli.js');
+const fs = require('fs');
+const pa = require('path');
+const mainFileLocation = pa.basename(process.execPath).startsWith('node') ? __dirname : pa.dirname(process.execPath);
+try {
+    if (fs.existsSync(pa.join(mainFileLocation, 'assets'))) {
+        require(pa.join(mainFileLocation, 'assets/vm/cli.js'));
+    } else {
+        require(__dirname + '/../lib/cli.js');
+    }
+}
+catch (error) {
+    console.log("Error:\n", error); // Fallback to original
+    require(__dirname + '/../lib/cli.js');
+}
